@@ -427,6 +427,8 @@
               return
             }
             this.submitted = true
+            this.problemSubmitDisabled = false;
+            setTimeout(function() {this.problemSubmitDisabled = true}, 6000)
             this.checkSubmissionStatus()
           }, res => {
             this.getCaptchaSrc()
