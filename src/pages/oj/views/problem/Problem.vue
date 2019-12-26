@@ -91,7 +91,7 @@
               </div>
             </template>
             <Button type="warning" icon="edit" :loading="submitting" @click="submitCode"
-                    :disabled="problemSubmitDisabled || submitted"
+                    :disabled="problemSubmitDisabled || submitted || hasSubmittedCur"
                     class="fl-right">
               <span v-if="submitting">{{$t('m.Submitting')}}</span>
               <span v-else>{{$t('m.Submit')}}</span>
@@ -234,6 +234,7 @@
         theme: 'solarized',
         submissionId: '',
         submitted: false,
+        hasSubmittedCur: false,
         result: {
           result: 9
         },
@@ -427,8 +428,12 @@
               return
             }
             this.submitted = true
-            this.problemSubmitDisabled = false;
-            setTimeout(function() {this.problemSubmitDisabled = true}, 6000)
+            // 前端限流
+            this.hasSubmittedCur = true
+            setTimeout(function () {
+              this.problemSubmitDisabled = false
+            }, 60000)
+
             this.checkSubmissionStatus()
           }, res => {
             this.getCaptchaSrc()
